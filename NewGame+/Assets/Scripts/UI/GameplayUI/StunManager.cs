@@ -7,6 +7,7 @@ public class StunManager : MonoBehaviour
 
     [SerializeField] GameObject Player;
     [SerializeField] Slider stunBar;
+    [SerializeField] GameObject StunEffect;
 
     public float maxTime;
     public float currentTime;
@@ -16,6 +17,7 @@ public class StunManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        StunEffect.SetActive(false);
         RectTransform rt = stunBar.GetComponent<RectTransform>();
         Vector2 size = rt.sizeDelta;
         size.x = 0f;
@@ -32,14 +34,18 @@ public class StunManager : MonoBehaviour
         {
             stunBar.value = currentTime / maxTime;
             currentTime = currentTime - 0.005f;
+            
         }
-        if(currentTime <= 0)
+        else
         {
             RectTransform rt = stunBar.GetComponent<RectTransform>();
             Vector2 size = rt.sizeDelta;
             size.x = 1f;
             rt.sizeDelta = size;
             maxTime = 0;
+
+            stunEnd.Invoke(stunEnd.Data);
+            StunEffect.SetActive(false);
         }
 
         if(maxTime > 20)
@@ -73,5 +79,6 @@ public class StunManager : MonoBehaviour
         size.x = size.x + (25f * newTime);
         rt.sizeDelta = size;
 
+        StunEffect.SetActive(true);
     }
 }

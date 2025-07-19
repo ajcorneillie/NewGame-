@@ -59,9 +59,10 @@ public class PlayerMovement : MonoBehaviour
     private float rotationX = 0;
     private CharacterController characterController;
 
-    private bool canMove = true;
+    public bool canMove = true;
     public bool staminaLock = false;
     bool isRunning = false;
+    public bool isStunned;
 
     GameEvent Running = new GameEvent();
     GameEvent pickUpAttempt = new GameEvent();
@@ -89,6 +90,9 @@ public class PlayerMovement : MonoBehaviour
         {
             item.SetActive(false);
         }
+
+        EventManager.AddListener(GameplayEvent.StunStart, StartStun);
+        EventManager.AddListener(GameplayEvent.StunEnd, EndStun);
 
         EventManager.AddInvoker(GameplayEvent.Running,Running);
         EventManager.AddInvoker(GameplayEvent.PickupItemAttempt, pickUpAttempt);
@@ -143,7 +147,7 @@ public class PlayerMovement : MonoBehaviour
             isRunning = false;
         }
 
-        if (isRunning == true)
+        if (isRunning == true && canMove)
         {
             Running.AddData(GameplayEventData.stamina, 3f);
             Running.AddData(GameplayEventData.Player, gameObject);
@@ -220,7 +224,7 @@ public class PlayerMovement : MonoBehaviour
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scroll > 0f)
+        if (scroll > 0f && canMove)
         {
             // Scroll up
             currentItemIndex++;
@@ -228,7 +232,7 @@ public class PlayerMovement : MonoBehaviour
                 currentItemIndex = 0;
             UpdateInventorySelection();
         }
-        else if (scroll < 0f)
+        else if (scroll < 0f && canMove)
         {
             // Scroll down
             currentItemIndex--;
@@ -237,7 +241,7 @@ public class PlayerMovement : MonoBehaviour
             UpdateInventorySelection();
         }
 
-        if (Input.GetKey(KeyCode.Q))
+        if (Input.GetKey(KeyCode.Q) && canMove)
         {
             if (currentObject.GetComponent<Slot>().myObject != null)
             {
@@ -326,6 +330,16 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+    }
+
+    void StartStun(Dictionary<System.Enum, object> data)
+    {
+        canMove = false;
+    }
+
+    void EndStun(Dictionary<System.Enum, object> data)
+    {
+        canMove = true;
     }
 
 }
