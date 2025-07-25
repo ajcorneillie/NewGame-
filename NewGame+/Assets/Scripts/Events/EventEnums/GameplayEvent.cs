@@ -16,6 +16,10 @@ public enum GameplayEvent
     HealthUpdate,
     StunEnd,
     StunStart,
+    VisionActivate,
+    OpenDoor,
+    InitializeRoom,
+    UpdateNavMesh,
 
 }
 
@@ -28,4 +32,10 @@ public enum GameplayEventData
     stamina,
     health,
     Time,
+    Collision,
+    KeycardLevel,
+    Door,
+    RoomInfo,
+    Room,
+
 }

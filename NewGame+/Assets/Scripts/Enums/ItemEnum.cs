@@ -7,5 +7,13 @@ public enum ItemEnum
     StaminaBatteries,
     StunGrenade,
     VisionVirus,
+    RedKeycard,
+    OrangeKeycard,
+    YellowKeycard,
+    GreenKeycard,
+    BlueKeycard,
+    PurpleKeycard,
+    PinkKeycard,
+    OmniKeycard,
 
 }
