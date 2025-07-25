@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 5721591935772851183}
   - component: {fileID: 2033499148265224600}
   - component: {fileID: 8760951245721964515}
-  - component: {fileID: 5774823360920570981}
-  - component: {fileID: 4111985389402045197}
+  - component: {fileID: 6584312935206935563}
+  - component: {fileID: 2112444991134978798}
+  - component: {fileID: -6530637784643731336}
   m_Layer: 0
-  m_Name: VisionVirus
+  m_Name: VisionVirusProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29,8 +30,8 @@ Transform:
   m_GameObject: {fileID: 5097907667260469749}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -2.7137, y: 2.812, z: 1.0735}
-  m_LocalScale: {x: 0.07563262, y: 0.27374288, z: 0.09093535}
+  m_LocalPosition: {x: -2.7137, y: 2.8508, z: 0.9548}
+  m_LocalScale: {x: 0.07563262, y: 0.036438845, z: 0.16859859}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -88,14 +89,53 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5774823360920570981
+--- !u!114 &6584312935206935563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5097907667260469749}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5a9f90ed7c03a0646beda8816db124a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!54 &2112444991134978798
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5097907667260469749}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!65 &-6530637784643731336
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5097907667260469749}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: ffbf09190aeb6764da8ec4cd2f85f256, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -107,22 +147,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 1.0000002, z: 1.0000002}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4111985389402045197
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5097907667260469749}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1037d59dd90ec17488f194598c31b021, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemName: 0
-  stunGrenade: {fileID: 0}
-  visionVirusProjectile: {fileID: 5097907667260469749, guid: 4fca925c0b0767642aa52a0aeaddf80e, type: 3}
-  Player: {fileID: 0}
-  playerCamera: {fileID: 0}
