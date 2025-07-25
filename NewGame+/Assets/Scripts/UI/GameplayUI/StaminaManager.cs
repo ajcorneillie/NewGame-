@@ -6,7 +6,7 @@ public class StaminaManager : MonoBehaviour
 {
     public float maxStamina;
     public float currentStamina;
-    public float staminaRegenRate = 1;
+    public float staminaRegenRate = 1f;
     bool staminaLock = false;
 
     [SerializeField] GameObject Player;
@@ -75,7 +75,17 @@ public class StaminaManager : MonoBehaviour
 
         if (player == Player)
         {
-            currentStamina = currentStamina - dropRate;
+            if (dropRate > 0)
+            {
+                currentStamina = currentStamina - dropRate;
+            }
+            else
+            {
+                if (currentStamina < maxStamina)
+                {
+                    currentStamina = currentStamina - dropRate;
+                }
+            }
         }
         
     }

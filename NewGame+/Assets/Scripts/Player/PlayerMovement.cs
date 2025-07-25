@@ -7,6 +7,7 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] public GameObject pickUpMessage;
+    [SerializeField] public GameObject openDoorMessage;
     [SerializeField] private float maxRange = 2f;
 
     [SerializeField] GameObject slot1;
@@ -21,14 +22,33 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] GameObject healingJuice;
     [SerializeField] GameObject staminaBatteries;
     [SerializeField] GameObject stunGrenade;
+    [SerializeField] GameObject redKeycard;
+    [SerializeField] GameObject orangeKeycard;
+    [SerializeField] GameObject yellowKeycard;
+    [SerializeField] GameObject greenKeycard;
+    [SerializeField] GameObject blueKeycard;
+    [SerializeField] GameObject purpleKeycard;
+    [SerializeField] GameObject pinkKeycard;
+    [SerializeField] GameObject omniKeycard;
 
     [SerializeField] GameObject visionVirusPickUp;
     [SerializeField] GameObject rebootKitPickUp;
     [SerializeField] GameObject healingJuicePickUp;
     [SerializeField] GameObject staminaBatteriesPickUp;
     [SerializeField] GameObject stunGrenadePickUp;
+    [SerializeField] GameObject redKeycardPickUp;
+    [SerializeField] GameObject orangeKeycardPickUp;
+    [SerializeField] GameObject yellowKeycardPickUp;
+    [SerializeField] GameObject greenKeycardPickUp;
+    [SerializeField] GameObject blueKeycardPickUp;
+    [SerializeField] GameObject purpleKeycardPickUp;
+    [SerializeField] GameObject pinkKeycardPickUp;
+    [SerializeField] GameObject omniKeycardPickUp;
 
+    [SerializeField] GameObject player;
 
+    [SerializeField] GameObject blindingLight;
+    
     [SerializeField] GameObject inventoryManager;
 
     [SerializeField] private LayerMask targetLayers;
@@ -59,7 +79,9 @@ public class PlayerMovement : MonoBehaviour
     private float rotationX = 0;
     private CharacterController characterController;
 
+    float noVisionTime;
     public bool canMove = true;
+    public bool noVision = false;
     public bool staminaLock = false;
     bool isRunning = false;
     public bool isStunned;
@@ -68,23 +90,41 @@ public class PlayerMovement : MonoBehaviour
     GameEvent pickUpAttempt = new GameEvent();
     GameEvent stimUsed = new GameEvent();
     GameEvent Stun = new GameEvent();
+    
 
     void Start()
     {
         EventManager.AddInvoker(GameplayEvent.HealthUpdate, stimUsed);
         EventManager.AddInvoker(GameplayEvent.StunStart, Stun);
+        
 
         itemTypes.Add(rebootKit);
         itemTypes.Add(visionVirus);
         itemTypes.Add(stunGrenade);
         itemTypes.Add(staminaBatteries);
         itemTypes.Add(healingJuice);
+        itemTypes.Add(redKeycard);
+        itemTypes.Add(orangeKeycard);
+        itemTypes.Add(yellowKeycard);
+        itemTypes.Add(greenKeycard);
+        itemTypes.Add(blueKeycard);
+        itemTypes.Add(purpleKeycard);
+        itemTypes.Add(pinkKeycard);
+        itemTypes.Add(omniKeycard);
 
         itemTypesDropped.Add(rebootKitPickUp);
         itemTypesDropped.Add(visionVirusPickUp);
         itemTypesDropped.Add(stunGrenadePickUp);
         itemTypesDropped.Add(staminaBatteriesPickUp);
         itemTypesDropped.Add(healingJuicePickUp);
+        itemTypesDropped.Add(redKeycardPickUp);
+        itemTypesDropped.Add(orangeKeycardPickUp);
+        itemTypesDropped.Add(yellowKeycardPickUp);
+        itemTypesDropped.Add(greenKeycardPickUp);
+        itemTypesDropped.Add(blueKeycardPickUp);
+        itemTypesDropped.Add(purpleKeycardPickUp);
+        itemTypesDropped.Add(pinkKeycardPickUp);
+        itemTypesDropped.Add(omniKeycardPickUp);
 
         foreach (GameObject item in itemTypes)
         {
@@ -93,7 +133,7 @@ public class PlayerMovement : MonoBehaviour
 
         EventManager.AddListener(GameplayEvent.StunStart, StartStun);
         EventManager.AddListener(GameplayEvent.StunEnd, EndStun);
-
+        EventManager.AddListener(GameplayEvent.VisionActivate, VisionBlockActivate);
         EventManager.AddInvoker(GameplayEvent.Running,Running);
         EventManager.AddInvoker(GameplayEvent.PickupItemAttempt, pickUpAttempt);
         EventManager.AddListener(GameplayEvent.UseItem, ItemUsed);
@@ -131,6 +171,7 @@ public class PlayerMovement : MonoBehaviour
 
         inventoryManager.GetComponent<InventoryManager>().InitializeMe(slots);
         UpdateInventorySelection();
+        blindingLight.SetActive(false);
     }
 
     void Update()
@@ -176,7 +217,7 @@ public class PlayerMovement : MonoBehaviour
             moveDirection.y -= gravity * Time.deltaTime;
         }
 
-        if (Input.GetKey(KeyCode.R) && canMove)
+        if (Input.GetKey(KeyCode.LeftControl) && canMove)
         {
             characterController.height = crouchHeight;
             walkSpeed = crouchSpeed;
@@ -208,8 +249,17 @@ public class PlayerMovement : MonoBehaviour
         if (Physics.Raycast(ray, out hit, maxRange, targetLayers) == true)
         {
             Debug.Log("You're pointing at: " + hit.collider.name);
-            pickUpMessage.SetActive(true);
-            if (Input.GetKey(KeyCode.E))
+
+            if (hit.collider.gameObject.CompareTag("Door"))
+            {
+                openDoorMessage.SetActive(true);
+            }
+            else
+            {
+                pickUpMessage.SetActive(true);
+            }
+            
+            if (Input.GetKey(KeyCode.E) && hit.collider.gameObject.CompareTag("Door") == false)
             {
                 
                 pickUpAttempt.AddData(GameplayEventData.Item, hit.collider.gameObject);
@@ -220,11 +270,12 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             pickUpMessage.SetActive(false);
+            openDoorMessage.SetActive(false);
         }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");
 
-        if (scroll > 0f && canMove)
+        if (scroll < 0f && canMove)
         {
             // Scroll up
             currentItemIndex++;
@@ -232,7 +283,7 @@ public class PlayerMovement : MonoBehaviour
                 currentItemIndex = 0;
             UpdateInventorySelection();
         }
-        else if (scroll < 0f && canMove)
+        else if (scroll > 0f && canMove)
         {
             // Scroll down
             currentItemIndex--;
@@ -276,6 +327,50 @@ public class PlayerMovement : MonoBehaviour
             Stun.AddData(GameplayEventData.Time, 5f);
             Stun.AddData(GameplayEventData.Player, gameObject);
             Stun.Invoke(Stun.Data);
+        }
+
+        if (noVision == true)
+        {
+            if (noVisionTime <= 0)
+            {
+                noVision = false;
+                blindingLight.SetActive(false);
+            }
+            noVisionTime--;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            currentItemIndex = 0;
+            UpdateInventorySelection();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            currentItemIndex = 1;
+            UpdateInventorySelection();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            currentItemIndex = 2;
+            UpdateInventorySelection();
+        }
+        if (isSupplier)
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha4))
+            {
+                currentItemIndex = 3;
+                UpdateInventorySelection();
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha5))
+            {
+                currentItemIndex = 4;
+                UpdateInventorySelection();
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha6))
+            {
+                currentItemIndex = 5;
+                UpdateInventorySelection();
+            }
         }
     }
 
@@ -340,6 +435,20 @@ public class PlayerMovement : MonoBehaviour
     void EndStun(Dictionary<System.Enum, object> data)
     {
         canMove = true;
+    }
+    void VisionBlockActivate(Dictionary<System.Enum, object> data)
+    {
+        data.TryGetValue(GameplayEventData.Time, out object output);
+        float time = (float)output;
+        data.TryGetValue(GameplayEventData.Collision, out output);
+        GameObject collision = (GameObject)output;
+
+        if (collision == player)
+        {
+            noVision = true;
+            noVisionTime = time * 100f;
+            blindingLight.SetActive(true);
+        }
     }
 
 }
