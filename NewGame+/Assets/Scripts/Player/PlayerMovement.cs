@@ -58,6 +58,7 @@ public class PlayerMovement : MonoBehaviour
 
     GameObject currentObject;
 
+    bool isRedLight = false;
     public bool isSupplier = false;
 
     List<GameObject> slots = new List<GameObject>();
@@ -72,12 +73,14 @@ public class PlayerMovement : MonoBehaviour
     public float lookSpeed = 2f;
     public float lookXLimit = 45f;
     public float defaultHeight = 2f;
-    public float crouchHeight = 1f;
+    public float crouchHeight = 0.5f;
     public float crouchSpeed = 3f;
 
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
     private CharacterController characterController;
+
+    public LayerMask obstacleMask;
 
     float noVisionTime;
     public bool canMove = true;
@@ -85,6 +88,7 @@ public class PlayerMovement : MonoBehaviour
     public bool staminaLock = false;
     bool isRunning = false;
     public bool isStunned;
+    public bool canStand;
 
     GameEvent Running = new GameEvent();
     GameEvent pickUpAttempt = new GameEvent();
@@ -94,6 +98,7 @@ public class PlayerMovement : MonoBehaviour
 
     void Start()
     {
+        
         EventManager.AddInvoker(GameplayEvent.HealthUpdate, stimUsed);
         EventManager.AddInvoker(GameplayEvent.StunStart, Stun);
         
@@ -137,6 +142,8 @@ public class PlayerMovement : MonoBehaviour
         EventManager.AddInvoker(GameplayEvent.Running,Running);
         EventManager.AddInvoker(GameplayEvent.PickupItemAttempt, pickUpAttempt);
         EventManager.AddListener(GameplayEvent.UseItem, ItemUsed);
+        EventManager.AddListener(GameplayEvent.RedLight, RedLight);
+        EventManager.AddListener(GameplayEvent.GreenLight, GreenLight);
 
         characterController = GetComponent<CharacterController>();
         Cursor.lockState = CursorLockMode.Locked;
@@ -217,7 +224,7 @@ public class PlayerMovement : MonoBehaviour
             moveDirection.y -= gravity * Time.deltaTime;
         }
 
-        if (Input.GetKey(KeyCode.LeftControl) && canMove)
+        if (Input.GetKey(KeyCode.C) && canMove)
         {
             characterController.height = crouchHeight;
             walkSpeed = crouchSpeed;
@@ -228,9 +235,17 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            characterController.height = defaultHeight;
-            walkSpeed = 6f;
-            runSpeed = 12f;
+            Vector3 bottom = transform.position + Vector3.up * crouchHeight;
+            Vector3 top = transform.position + Vector3.up * defaultHeight;
+
+            // Check for obstacles between crouching height and standing height
+            if (!Physics.CheckCapsule(bottom, top, characterController.radius, obstacleMask))
+            {
+                characterController.height = defaultHeight;
+                walkSpeed = 6f;
+                runSpeed = 12f;
+            }
+
         }
 
         characterController.Move(moveDirection * Time.deltaTime);
@@ -372,6 +387,13 @@ public class PlayerMovement : MonoBehaviour
                 UpdateInventorySelection();
             }
         }
+
+        if (isRedLight == true && Input.anyKey)
+        {
+            stimUsed.AddData(GameplayEventData.health, -0.1f);
+            stimUsed.AddData(GameplayEventData.Player, gameObject);
+            stimUsed.Invoke(stimUsed.Data);
+        }
     }
 
     void UpdateInventorySelection()
@@ -449,6 +471,16 @@ public class PlayerMovement : MonoBehaviour
             noVisionTime = time * 100f;
             blindingLight.SetActive(true);
         }
+    }
+
+    void RedLight(Dictionary<System.Enum, object> data)
+    {
+        isRedLight = true;
+    }
+
+    void GreenLight(Dictionary<System.Enum, object> data)
+    {
+        isRedLight = false;
     }
 
 }

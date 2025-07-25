@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8760951245721964515}
   - component: {fileID: 6584312935206935563}
   - component: {fileID: 2112444991134978798}
-  - component: {fileID: -6530637784643731336}
+  - component: {fileID: 5859974496722842019}
   m_Layer: 0
   m_Name: VisionVirusProjectile
   m_TagString: Untagged
@@ -128,8 +128,8 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &-6530637784643731336
-BoxCollider:
+--- !u!135 &5859974496722842019
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -147,5 +147,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 1.0000002, z: 1.0000002}
+  m_Radius: 0.5000001
   m_Center: {x: 0, y: 0, z: 0}

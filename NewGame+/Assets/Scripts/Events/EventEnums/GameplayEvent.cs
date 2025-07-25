@@ -20,6 +20,8 @@ public enum GameplayEvent
     OpenDoor,
     InitializeRoom,
     UpdateNavMesh,
+    RedLight,
+    GreenLight,
 
 }
 
