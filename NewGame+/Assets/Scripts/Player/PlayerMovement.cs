@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] public GameObject pickUpMessage;
     [SerializeField] public GameObject openDoorMessage;
+    [SerializeField] public GameObject turnDialMessage;
     [SerializeField] private float maxRange = 2f;
 
     [SerializeField] GameObject slot1;
@@ -94,14 +95,14 @@ public class PlayerMovement : MonoBehaviour
     GameEvent pickUpAttempt = new GameEvent();
     GameEvent stimUsed = new GameEvent();
     GameEvent Stun = new GameEvent();
-    
+    GameEvent turnDial = new GameEvent();
 
     void Start()
     {
         
         EventManager.AddInvoker(GameplayEvent.HealthUpdate, stimUsed);
         EventManager.AddInvoker(GameplayEvent.StunStart, Stun);
-        
+        EventManager.AddInvoker(GameplayEvent.TurnDial, turnDial);
 
         itemTypes.Add(rebootKit);
         itemTypes.Add(visionVirus);
@@ -239,11 +240,20 @@ public class PlayerMovement : MonoBehaviour
             Vector3 top = transform.position + Vector3.up * defaultHeight;
 
             // Check for obstacles between crouching height and standing height
-            if (!Physics.CheckCapsule(bottom, top, characterController.radius, obstacleMask))
+            if (!Physics.CheckCapsule(bottom, top, player.GetComponent<CapsuleCollider>().radius, obstacleMask))
             {
                 characterController.height = defaultHeight;
                 walkSpeed = 6f;
                 runSpeed = 12f;
+            }
+            else
+            {
+                characterController.height = crouchHeight;
+                walkSpeed = crouchSpeed;
+                runSpeed = crouchSpeed;
+                Running.AddData(GameplayEventData.stamina, -1f);
+                Running.AddData(GameplayEventData.Player, gameObject);
+                Running.Invoke(Running.Data);
             }
 
         }
@@ -269,23 +279,33 @@ public class PlayerMovement : MonoBehaviour
             {
                 openDoorMessage.SetActive(true);
             }
+            else if (hit.collider.gameObject.CompareTag("Dial"))
+            {
+                turnDialMessage.SetActive(true);
+            }
             else
             {
                 pickUpMessage.SetActive(true);
             }
             
-            if (Input.GetKey(KeyCode.E) && hit.collider.gameObject.CompareTag("Door") == false)
+            if (Input.GetKey(KeyCode.E) && hit.collider.gameObject.CompareTag("Door") == false && hit.collider.gameObject.CompareTag("Dial") == false)
             {
                 
                 pickUpAttempt.AddData(GameplayEventData.Item, hit.collider.gameObject);
                 pickUpAttempt.Invoke(pickUpAttempt.Data);
                 UpdateInventorySelection();
             }
+            else if (Input.GetKeyDown(KeyCode.E) && hit.collider.gameObject.CompareTag("Dial") == true)
+            {
+                turnDial.AddData(GameplayEventData.Dial, hit.collider.gameObject);
+                turnDial.Invoke(turnDial.Data);
+            }
         }
         else
         {
             pickUpMessage.SetActive(false);
             openDoorMessage.SetActive(false);
+            turnDialMessage.SetActive(false);
         }
 
         float scroll = Input.GetAxis("Mouse ScrollWheel");

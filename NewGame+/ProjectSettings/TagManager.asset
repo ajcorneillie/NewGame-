@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Enemy
   - Door
+  - Dial
+  - Computer
   layers:
   - Default
   - TransparentFX
@@ -16,8 +18,8 @@ TagManager:
   - Items
   - Player
   - Ground
-  - 
-  - 
+  - Wall
+  - Structure
   - 
   - 
   - 

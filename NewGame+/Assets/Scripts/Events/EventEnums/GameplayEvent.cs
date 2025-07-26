@@ -22,6 +22,10 @@ public enum GameplayEvent
     UpdateNavMesh,
     RedLight,
     GreenLight,
+    TurnDial,
+    DialCodes,
+    CodeActive,
+    CodeDeactive,
 
 }
 
@@ -39,5 +43,7 @@ public enum GameplayEventData
     Door,
     RoomInfo,
     Room,
+    Dial,
+    DialCode,
 
 }
