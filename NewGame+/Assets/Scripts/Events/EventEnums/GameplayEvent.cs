@@ -26,6 +26,8 @@ public enum GameplayEvent
     DialCodes,
     CodeActive,
     CodeDeactive,
+    SoundCreated,
+    ActivateStun,
 
 }
 
@@ -45,5 +47,8 @@ public enum GameplayEventData
     Room,
     Dial,
     DialCode,
+    SoundLocation,
+    StunDuration,
+    StunRotation,
 
 }

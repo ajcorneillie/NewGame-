@@ -91,11 +91,13 @@ public class PlayerMovement : MonoBehaviour
     public bool isStunned;
     public bool canStand;
 
+
     GameEvent Running = new GameEvent();
     GameEvent pickUpAttempt = new GameEvent();
     GameEvent stimUsed = new GameEvent();
     GameEvent Stun = new GameEvent();
     GameEvent turnDial = new GameEvent();
+    GameEvent makeSound = new GameEvent();
 
     void Start()
     {
@@ -103,6 +105,7 @@ public class PlayerMovement : MonoBehaviour
         EventManager.AddInvoker(GameplayEvent.HealthUpdate, stimUsed);
         EventManager.AddInvoker(GameplayEvent.StunStart, Stun);
         EventManager.AddInvoker(GameplayEvent.TurnDial, turnDial);
+        EventManager.AddInvoker(GameplayEvent.SoundCreated, makeSound);
 
         itemTypes.Add(rebootKit);
         itemTypes.Add(visionVirus);
@@ -413,6 +416,15 @@ public class PlayerMovement : MonoBehaviour
             stimUsed.AddData(GameplayEventData.health, -0.1f);
             stimUsed.AddData(GameplayEventData.Player, gameObject);
             stimUsed.Invoke(stimUsed.Data);
+        }
+
+        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
+        {
+            if (characterController.height != crouchHeight)
+            {
+                makeSound.AddData(GameplayEventData.SoundLocation, player);
+                makeSound.Invoke(makeSound.Data);
+            }
         }
     }
 
