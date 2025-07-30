@@ -29,8 +29,8 @@ public class RunRoom : MonoBehaviour
         {
             obstacle1.SetActive(false);
         }
-        
-        
+
+
 
     }
 
