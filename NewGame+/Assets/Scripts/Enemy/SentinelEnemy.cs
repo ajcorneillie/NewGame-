@@ -20,6 +20,8 @@ public class SentinelEnemy : MonoBehaviour
     public float timeBetweenAttacks;
     bool alreadyAttacked;
 
+    public float detectedSpeed;
+    public float checkDelayDuration;
     public float soundRange, attackRange;
     public bool playerInSoundRange, playerInAttackRange;
 
@@ -44,7 +46,7 @@ public class SentinelEnemy : MonoBehaviour
         chaseTimer.Duration = chaseDuration;
 
         checkDelay = gameObject.AddComponent<Timer>();
-        checkDelay.Duration = 3f;
+        checkDelay.Duration = checkDelayDuration;
         checkDelay.Run();
 
         stunTimer = gameObject.AddComponent<Timer>();
@@ -69,7 +71,7 @@ public class SentinelEnemy : MonoBehaviour
             ChasePlayer();
         }
 
-        if (playerInAttackRange && playerInSoundRange)
+        if (playerInAttackRange)
         {
             AttackPlayer();
         }
@@ -140,10 +142,10 @@ public class SentinelEnemy : MonoBehaviour
 
     void ChaseSpeedUpdate()
     {
-        if (agent.speed != 13f)
+        if (agent.speed != detectedSpeed)
         {
             checkAreaDelay = true;
-            agent.speed = 13f;
+            agent.speed = detectedSpeed;
         }
     }
 

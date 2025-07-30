@@ -76,6 +76,8 @@ public class PlayerMovement : MonoBehaviour
     public float defaultHeight = 2f;
     public float crouchHeight = 0.5f;
     public float crouchSpeed = 3f;
+    public float crouchStaminaRegenRate;
+    public float sprintStaminaLossRate;
 
     private Vector3 moveDirection = Vector3.zero;
     private float rotationX = 0;
@@ -201,7 +203,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (isRunning == true && canMove)
         {
-            Running.AddData(GameplayEventData.stamina, 3f);
+            Running.AddData(GameplayEventData.stamina, sprintStaminaLossRate);
             Running.AddData(GameplayEventData.Player, gameObject);
             Running.Invoke(Running.Data);
         }
@@ -233,7 +235,7 @@ public class PlayerMovement : MonoBehaviour
             characterController.height = crouchHeight;
             walkSpeed = crouchSpeed;
             runSpeed = crouchSpeed;
-            Running.AddData(GameplayEventData.stamina, -1f);
+            Running.AddData(GameplayEventData.stamina, crouchStaminaRegenRate);
             Running.AddData(GameplayEventData.Player, gameObject);
             Running.Invoke(Running.Data);
         }
