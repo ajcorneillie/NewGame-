@@ -28,6 +28,7 @@ public enum GameplayEvent
     CodeDeactive,
     SoundCreated,
     ActivateStun,
+    RoomInitialized,
 
 }
 
