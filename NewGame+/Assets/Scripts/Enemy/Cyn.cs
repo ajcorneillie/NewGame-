@@ -1,13 +1,18 @@
+using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
 
-
-public class SentinelEnemy : MonoBehaviour
+public class Cyn : MonoBehaviour
 {
-
     public NavMeshAgent agent;
     public Transform player;
+    [SerializeField] NavMeshSurface navMesh;
+
+    public float viewRadius = 40f;
+    public float viewAngle = 120f;
+    public LayerMask obstacleMask;
 
     public LayerMask whatIsGround, whatIsPlayer;
 
@@ -25,17 +30,14 @@ public class SentinelEnemy : MonoBehaviour
 
     public float moveSpeedDetect;
 
-    [SerializeField] GameObject lightObj;
-
     bool checkAreaDelay;
 
     public float stunCycle = 5f;
-    public float chaseDuration = 10f;
+    public float chaseDuration = 3f;
 
     Timer checkDelay;
-    Timer stunTimer;
     Timer chaseTimer;
-    
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -47,11 +49,8 @@ public class SentinelEnemy : MonoBehaviour
         checkDelay.Duration = checkDelayDuration;
         checkDelay.Run();
 
-        stunTimer = gameObject.AddComponent<Timer>();
-        stunTimer.Duration = stunCycle;
-        stunTimer.Run();
-        EventManager.AddListener(GameplayEvent.SoundCreated, HearSound);
         player = GameObject.Find("Player").transform;
+        navMesh.BuildNavMesh();
     }
 
     // Update is called once per frame
@@ -59,37 +58,59 @@ public class SentinelEnemy : MonoBehaviour
     {
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
-        if (playerInSoundRange == false && checkDelay.Finished)
-        {
-            Patrolling();
-        }
+        //if (playerInSoundRange == false && checkDelay.Finished)
+        //{
+        //    Patrolling();
+        //}
 
         if (playerInSoundRange && !playerInAttackRange)
         {
             ChasePlayer();
         }
 
-        if (playerInAttackRange)
-        {
-            AttackPlayer();
-        }
+        //if (playerInAttackRange)
+        //{
+        //    AttackPlayer();
+        //}
 
-        if (stunTimer.Finished)
-        {
-            lightObj.SetActive(true);
-            lightObj.GetComponent<SentinelStun>().stunTimer.Run();
-            stunTimer.Run();
-        }
+        //if (checkDelay.Finished != true)
+        //{
+        //    transform.Rotate(0f, 0.5f * Time.deltaTime, 0f);
+        //}
 
-        if (chaseTimer.Finished == true)
+        //if (chaseTimer.Finished == true)
+        //{
+        //    if (checkAreaDelay)
+        //    {
+        //        checkDelay.Run();
+        //        checkAreaDelay = false;
+        //    }
+        //    agent.speed = 3f;
+        //    playerInSoundRange = false;
+        //}
+
+        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+        Vector3 directionToPlayer = (player.position - transform.position).normalized;
+        // Check if player is within cone angle and radius
+        if (Vector3.Angle(transform.forward, directionToPlayer) < viewAngle / 2f &&
+            distanceToPlayer <= viewRadius)
         {
-            if (checkAreaDelay)
+            // Raycast to check if something is blocking view
+            if (!Physics.Raycast(transform.position, directionToPlayer, distanceToPlayer, obstacleMask) && !playerInAttackRange)
             {
-                checkDelay.Run();
-                checkAreaDelay = false;
+                playerInSoundRange = true;
             }
-            agent.speed = 3f;
-            playerInSoundRange = false;
+            else
+            {
+                AttackPlayer();
+                playerInSoundRange = false;
+            }
+        }
+
+        if (agent.isOnOffMeshLink)
+        {
+            StartCoroutine(Jump());
         }
     }
 
@@ -108,7 +129,7 @@ public class SentinelEnemy : MonoBehaviour
 
         Vector3 distancetoWalkPoint = transform.position - walkPoint;
 
-        if(distancetoWalkPoint.magnitude < 5f)
+        if (distancetoWalkPoint.magnitude < 5f)
         {
             walkPointSet = false;
         }
@@ -129,11 +150,12 @@ public class SentinelEnemy : MonoBehaviour
                 walkPointSet = true;
             }
         }
-        
+
     }
 
     void ChasePlayer()
     {
+        
         ChaseSpeedUpdate();
         agent.SetDestination(player.transform.position);
     }
@@ -165,15 +187,34 @@ public class SentinelEnemy : MonoBehaviour
         alreadyAttacked = false;
     }
 
-    void HearSound(Dictionary<System.Enum, object> data)
+    void OnDrawGizmosSelected()
     {
-        data.TryGetValue(GameplayEventData.SoundLocation, out object output);
-        GameObject soundLocation = (GameObject)output;
-        if (Vector3.Distance(transform.position, soundLocation.transform.position) <= soundRange)
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, viewRadius);
+
+        Vector3 leftBoundary = Quaternion.Euler(0, -viewAngle / 2, 0) * transform.forward;
+        Vector3 rightBoundary = Quaternion.Euler(0, viewAngle / 2, 0) * transform.forward;
+
+        Gizmos.DrawLine(transform.position, transform.position + leftBoundary * viewRadius);
+        Gizmos.DrawLine(transform.position, transform.position + rightBoundary * viewRadius);
+    }
+
+    IEnumerator Jump()
+    {
+        Vector3 startPos = transform.position;
+        Vector3 endPos = agent.currentOffMeshLinkData.endPos;
+        float jumpHeight = 2f;
+        float duration = 0.5f;
+        float t = 0f;
+
+        while (t < 1f)
         {
-            playerInSoundRange = true;
-            chaseTimer.Run();
+            t += Time.deltaTime / duration;
+            float height = Mathf.Sin(Mathf.PI * t) * jumpHeight;
+            transform.position = Vector3.Lerp(startPos, endPos, t) + Vector3.up * height;
+            yield return null;
         }
-        
+
+        agent.CompleteOffMeshLink();
     }
 }

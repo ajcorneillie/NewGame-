@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5784305345893749668}
   - component: {fileID: 1562359375571285784}
   - component: {fileID: 8615263485970453464}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: NWDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30,8 +30,8 @@ Transform:
   m_GameObject: {fileID: 547910401083401994}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: -5, y: 3.5, z: 5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -5, y: 4, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 62973580999300015}
@@ -611,7 +611,7 @@ GameObject:
   - component: {fileID: 7999630789941820419}
   - component: {fileID: 7133860272861531104}
   - component: {fileID: 6721638909122003767}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: NDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -627,8 +627,8 @@ Transform:
   m_GameObject: {fileID: 966813305576303107}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 3.5, z: 7}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 4, z: 7}
+  m_LocalScale: {x: 1, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 62973580999300015}
@@ -963,7 +963,7 @@ GameObject:
   - component: {fileID: 5139286707025342241}
   - component: {fileID: 6318008858364458732}
   - component: {fileID: 5639603956599440357}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: EDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -979,8 +979,8 @@ Transform:
   m_GameObject: {fileID: 1690760248348324684}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 7, y: 3.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 7, y: 4, z: 0}
+  m_LocalScale: {x: 1, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 62973580999300015}
@@ -1315,7 +1315,7 @@ GameObject:
   - component: {fileID: 8639750147311079436}
   - component: {fileID: 5163184504998647713}
   - component: {fileID: 6479557588024390410}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: NEDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1331,8 +1331,8 @@ Transform:
   m_GameObject: {fileID: 1795946788258832858}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 5, y: 3.5, z: 5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 5, y: 4, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 62973580999300015}
@@ -1912,7 +1912,7 @@ GameObject:
   - component: {fileID: 112146094951636968}
   - component: {fileID: 5369503634017839873}
   - component: {fileID: 5139686532039243766}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SEDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1928,8 +1928,8 @@ Transform:
   m_GameObject: {fileID: 3619912019069884660}
   serializedVersion: 2
   m_LocalRotation: {x: 0.5, y: 0.5, z: -0.5, w: 0.5}
-  m_LocalPosition: {x: 5, y: 3.5, z: -5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 5, y: 4, z: -5}
+  m_LocalScale: {x: 1, y: 1, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 62973580999300015}
@@ -2509,7 +2509,7 @@ GameObject:
   - component: {fileID: 438251962642410352}
   - component: {fileID: 9160215082403726968}
   - component: {fileID: 374383152385267715}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2857,7 +2857,7 @@ GameObject:
   m_Component:
   - component: {fileID: 62973580999300015}
   - component: {fileID: 136093138164533083}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MiddleRoom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2936,7 +2936,7 @@ GameObject:
   - component: {fileID: 992359596295362243}
   - component: {fileID: 3580080208463779416}
   - component: {fileID: 7316481079324691002}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SWDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2952,8 +2952,8 @@ Transform:
   m_GameObject: {fileID: 5623520094395869909}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0.7071068, w: 0}
-  m_LocalPosition: {x: -5, y: 3.5, z: -5}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -5, y: 4, z: -5}
+  m_LocalScale: {x: 1, y: 1, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 62973580999300015}
@@ -3533,7 +3533,7 @@ GameObject:
   - component: {fileID: 1618746959656490719}
   - component: {fileID: 3392780144174777731}
   - component: {fileID: 2292362082181206368}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: WDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3549,8 +3549,8 @@ Transform:
   m_GameObject: {fileID: 7979000979779298806}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7, y: 3.5, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -7, y: 4, z: 0}
+  m_LocalScale: {x: 1, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 62973580999300015}
@@ -3885,7 +3885,7 @@ GameObject:
   - component: {fileID: 7591443174104235786}
   - component: {fileID: 1496304818691998909}
   - component: {fileID: 3602857877341906620}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SDoor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3901,8 +3901,8 @@ Transform:
   m_GameObject: {fileID: 8741126879518924183}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 3.5, z: -7}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 4, z: -7}
+  m_LocalScale: {x: 1, y: 1.2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 62973580999300015}
