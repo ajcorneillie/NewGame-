@@ -6,19 +6,20 @@ using UnityEngine.AI;
 
 public class Stalker : MonoBehaviour
 {
+    //Camera Information
     [Header("Vision")]
     [SerializeField] Camera playerCamera;
     [SerializeField] float visibleThreshold = 5f;
     float visibleTimer;
 
+    //different speeds
     [Header("Movement")]
     [SerializeField] float farSpeed = 20f;
     [SerializeField] float nearSpeed = 8f;
     [SerializeField] float slowDownRange = 25f;
     [SerializeField] float fleeDistance = 20f;
 
-    bool fleeing;
-
+    //navmesh information
     [SerializeField] NavMeshSurface NevMesh;
     public NavMeshAgent agent;
     public Transform player;
@@ -26,6 +27,7 @@ public class Stalker : MonoBehaviour
 
     public LayerMask whatIsGround, whatIsPlayer;
 
+    //controls attack delay
     public float timeBetweenAttacks;
     bool alreadyAttacked;
 
@@ -33,13 +35,16 @@ public class Stalker : MonoBehaviour
     bool playerInAttackRange;
     bool detected;
 
+    //path updating delay
     float pathUpdateCooldown = 0.75f;
     float pathTimer;
 
+    //event for taking damage
     GameEvent damage = new GameEvent();
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        //initializing navmesh and events
         EventManager.AddInvoker(GameplayEvent.HealthUpdate, damage);
         NevMesh.BuildNavMesh();
         player = GameObject.Find("Player").transform;
@@ -50,8 +55,10 @@ public class Stalker : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //checks if in attack range
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
+        //checks distance to player
         float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
         // Speed scaling
@@ -64,22 +71,27 @@ public class Stalker : MonoBehaviour
         }
         else
         {
+            //changes speed to 0 when player is looking at enemy
             agent.speed = nearSpeed;
         }
+        //checks if player is in attack range
         if (playerInAttackRange)
         {
             AttackPlayer();
         }
         else
         {
+            //Chase sequence
             Chase();
         }
+        //helps get back on navmesh
         if (agent.isOnOffMeshLink)
         {
             StartCoroutine(Jump());
         }
     }
 
+    //detects if the player can see them
     bool IsVisibleToPlayer()
     {
         Vector3 viewportPoint = playerCamera.WorldToViewportPoint(transform.position);
@@ -100,11 +112,13 @@ public class Stalker : MonoBehaviour
         return false;
     }
 
+    //moves towards player
     void StalkPlayer()
     {
         agent.SetDestination(player.position);
     }
 
+    //Moves towards player and updates destination with a delay
     void Chase()
     {
         pathTimer -= Time.deltaTime;
@@ -115,6 +129,8 @@ public class Stalker : MonoBehaviour
         agent.SetDestination(player.transform.position);
         
     }
+
+    //attacks the player
     void AttackPlayer()
     {
         agent.SetDestination(transform.position);
@@ -131,11 +147,13 @@ public class Stalker : MonoBehaviour
         }
     }
 
+    //resets the attack delay
     void ResetAttack()
     {
         alreadyAttacked = false;
     }
 
+    //controls the jump on navmesh
     IEnumerator Jump()
     {
         Vector3 startPos = transform.position;
