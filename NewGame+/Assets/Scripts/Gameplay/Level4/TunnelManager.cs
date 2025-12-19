@@ -1,8 +1,12 @@
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TunnelManager : MonoBehaviour
 {
+    [SerializeField] NavMeshSurface navMesh;
+
     [SerializeField] GameObject room1;
     [SerializeField] GameObject room2;
     [SerializeField] GameObject room3;

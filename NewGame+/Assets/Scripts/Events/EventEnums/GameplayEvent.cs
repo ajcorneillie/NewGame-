@@ -29,6 +29,8 @@ public enum GameplayEvent
     SoundCreated,
     ActivateStun,
     RoomInitialized,
+    BulletDamage,
+    PlayerDamage,
 
 }
 

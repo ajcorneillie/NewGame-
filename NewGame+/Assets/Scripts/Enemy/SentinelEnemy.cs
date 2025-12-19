@@ -35,6 +35,8 @@ public class SentinelEnemy : MonoBehaviour
     Timer checkDelay;
     Timer stunTimer;
     Timer chaseTimer;
+
+    int health = 5;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -51,6 +53,7 @@ public class SentinelEnemy : MonoBehaviour
         stunTimer.Duration = stunCycle;
         stunTimer.Run();
         EventManager.AddListener(GameplayEvent.SoundCreated, HearSound);
+        EventManager.AddListener(GameplayEvent.BulletDamage, BulletDamage);
         player = GameObject.Find("Player").transform;
     }
 
@@ -175,5 +178,21 @@ public class SentinelEnemy : MonoBehaviour
             chaseTimer.Run();
         }
         
+    }
+
+    void BulletDamage(Dictionary<System.Enum, object> data)
+    {
+        data.TryGetValue(GameplayEventData.Collision, out object output);
+        GameObject collision = (GameObject)output;
+        if (collision == gameObject)
+        {
+            data.TryGetValue(GameplayEventData.health, out output);
+            int Health = (int)output;
+            health = health - Health;
+            if (health <= 0)
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 }
